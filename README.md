@@ -1,4 +1,4 @@
-<img width="1036" height="420" alt="image" src="https://github.com/user-attachments/assets/5960ca3c-8643-4237-9d92-4e169674135d" /># Developing a Neural Network Classification Model
+# Developing a Neural Network Classification Model
 
 ## AIM
 
@@ -15,65 +15,89 @@ You are required to help the manager to predict the right group of the new custo
 ## Neural Network Model
 
 Include the neural network model diagram.
+<img width="769" height="494" alt="image" src="https://github.com/user-attachments/assets/ed31850b-80db-46d2-a958-78d7b18d8340" />
 
 ## DESIGN STEPS
 
-### STEP 1:
-Write your own steps
+### STEP 1: Data Collection and Loading
 
-### STEP 2:
+Load the customer dataset (customers.csv) containing features like Age, AnnualIncome, SpendingScore and the target variable Segment.
 
-### STEP 3:
+### STEP 2: Data Preprocessing
+
+Encode the target column (Segment) into numeric form, normalize the feature values, and split the dataset into training and testing sets.
+
+### STEP 3: Model Construction
+
+Define a Feedforward Neural Network using input layer, hidden layers with ReLU activation, and an output layer with 4 neurons for classification.
+
+### STEP 4: Model Training
+
+Initialize the loss function (CrossEntropyLoss) and optimizer (Adam), then train the model for a fixed number of epochs.
+
+### STEP 5: Model Evaluation and Prediction
+
+Evaluate the trained model using Confusion Matrix and Classification Report, and test it with new sample data for prediction.
 
 
 ## PROGRAM
 
-### Name: 
-### Register Number:
+### Name: Shivasri S
+### Register Number: 212224220098
 
 ```python
 class PeopleClassifier(nn.Module):
-    def __init__(self, input_size, num_classes):
+    def __init__(self, input_size):
         super(PeopleClassifier, self).__init__()
+        
         self.fc1 = nn.Linear(input_size, 32)
         self.fc2 = nn.Linear(32, 16)
-        self.fc3 = nn.Linear(16, num_classes)
-
+        self.fc3 = nn.Linear(16, 4)  # 4 segments
+        self.relu = nn.ReLU()
+        
     def forward(self, x):
-        x = torch.relu(self.fc1(x))
-        x = torch.relu(self.fc2(x))
+        x = self.relu(self.fc1(x))
+        x = self.relu(self.fc2(x))
         x = self.fc3(x)
         return x
 
+
 ```
 ```python
 
-# Initialize the Model, Loss Function, and Optimizer
 input_size = X_train.shape[1]
-num_classes = 4
 
-model = PeopleClassifier(input_size, num_classes)
+model = PeopleClassifier(input_size)
+
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+optimizer = optim.Adam(model.parameters(), lr=0.01)
+
 
 
 ```
 ```python
-def train_model(model, train_loader, criterion, optimizer, epochs):
+def train_model(model, X_train, y_train, criterion, optimizer, epochs):
+    losses = []
+    
     for epoch in range(epochs):
         model.train()
-        total_loss = 0
+        
+        outputs = model(X_train)
+        loss = criterion(outputs, y_train)
+        
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        
+        losses.append(loss.item())
+        
+        if (epoch+1) % 10 == 0:
+            print(f"Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.4f}")
+    
+    return losses
 
-        for inputs, labels in train_loader:
-            optimizer.zero_grad()
-            outputs = model(inputs)
-            loss = criterion(outputs, labels)
-            loss.backward()
-            optimizer.step()
+losses = train_model(model, X_train, y_train, criterion, optimizer, epochs=100)
 
-            total_loss += loss.item()
-
-        print(f"Epoch {epoch+1}/{epochs}, Loss: {total_loss:.4f}")
 ```
 
 
@@ -82,29 +106,36 @@ def train_model(model, train_loader, criterion, optimizer, epochs):
 
 Include screenshot of the dataset
 
+<img width="1919" height="1022" alt="image" src="https://github.com/user-attachments/assets/b79115d2-948f-4368-ad15-40fa9711183c" />
 
-<img width="1041" height="417" alt="image" src="https://github.com/user-attachments/assets/7c454a84-14b7-46d7-81de-7c47c89a70d8" />
 
 
 ## OUTPUT
+<img width="1033" height="490" alt="image" src="https://github.com/user-attachments/assets/c8bfd1ca-150f-4cf7-861d-2b18d896356d" />
 
+<img width="1509" height="712" alt="image" src="https://github.com/user-attachments/assets/b9d7264a-b53f-499f-9948-515b8d649cd8" />
 
 ### Confusion Matrix
 
 Include confusion matrix here
 
-<img width="839" height="713" alt="image" src="https://github.com/user-attachments/assets/0518cc64-dc13-4a35-828d-f67e51f1aec2" />
+<img width="761" height="301" alt="image" src="https://github.com/user-attachments/assets/8d539848-4683-456a-ba00-fd8224b94107" />
 
 
 ### Classification Report
 
 Include Classification Report here
-<img width="712" height="297" alt="image" src="https://github.com/user-attachments/assets/af4ba34d-5835-4d32-ad38-5cd6ca6a6062" />
+<img width="746" height="295" alt="image" src="https://github.com/user-attachments/assets/d15b41f4-3dae-43b3-aa91-0d77c29f534c" />
+
 
 
 ### New Sample Data Prediction
-<img width="970" height="322" alt="image" src="https://github.com/user-attachments/assets/3b83fcff-70bc-4991-bb2a-41e21a9f2c59" />
 
+<img width="1097" height="409" alt="image" src="https://github.com/user-attachments/assets/0060cda1-016c-4346-92e3-4e9b4d7d9923" />
+
+### Result:
+
+The Neural Network model was successfully developed to classify customers into four segments (A, B, C, D) based on Age, Annual Income, and Spending Score.
 
 
 Include your sample input and output here
