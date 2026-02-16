@@ -15,7 +15,9 @@ You are required to help the manager to predict the right group of the new custo
 ## Neural Network Model
 
 Include the neural network model diagram.
-<img width="769" height="494" alt="image" src="https://github.com/user-attachments/assets/ed31850b-80db-46d2-a958-78d7b18d8340" />
+
+<img width="1880" height="983" alt="image" src="https://github.com/user-attachments/assets/b766cdba-8dfc-4a15-9111-a907f6726696" />
+
 
 ## DESIGN STEPS
 
@@ -49,10 +51,9 @@ Evaluate the trained model using Confusion Matrix and Classification Report, and
 class PeopleClassifier(nn.Module):
     def __init__(self, input_size):
         super(PeopleClassifier, self).__init__()
-        
-        self.fc1 = nn.Linear(input_size, 32)
-        self.fc2 = nn.Linear(32, 16)
-        self.fc3 = nn.Linear(16, 4)  # 4 segments
+        self.fc1 = nn.Linear(input_size, 64)
+        self.fc2 = nn.Linear(64, 32)
+        self.fc3 = nn.Linear(32, 4)
         self.relu = nn.ReLU()
         
     def forward(self, x):
@@ -61,45 +62,58 @@ class PeopleClassifier(nn.Module):
         x = self.fc3(x)
         return x
 
-
-```
-```python
-
 input_size = X_train.shape[1]
-
 model = PeopleClassifier(input_size)
 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.01)
+optimizer = optim.Adam(model.parameters(), lr=0.001)
 
+
+
+```
+
+```python
+def train_model(model, train_loader, criterion, optimizer, epochs):
+    for epoch in range(epochs):
+        for inputs, labels in train_loader:
+            optimizer.zero_grad()
+            outputs = model(inputs)
+            loss = criterion(outputs, labels)
+            loss.backward()
+            optimizer.step()
+        
+        if epoch % 10 == 0:
+            print(f"Epoch {epoch}, Loss: {loss.item()}")
+
+train_model(model, train_loader, criterion, optimizer, epochs=100)
+
+# Evaluation
+model.eval()
+with torch.no_grad():
+    outputs = model(X_test)
+    _, predicted = torch.max(outputs, 1)
 
 
 ```
 ```python
-def train_model(model, X_train, y_train, criterion, optimizer, epochs):
-    losses = []
-    
-    for epoch in range(epochs):
-        model.train()
-        
-        outputs = model(X_train)
-        loss = criterion(outputs, y_train)
-        
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-        
-        losses.append(loss.item())
-        
-        if (epoch+1) % 10 == 0:
-            print(f"Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.4f}")
-    
-    return losses
+# Confusion Matrix
+cm = confusion_matrix(y_test, predicted)
 
-losses = train_model(model, X_train, y_train, criterion, optimizer, epochs=100)
+print("\nName: Shivasri")
+print("Register Number: 212224220098")
+
+print("\nConfusion Matrix:")
+print(cm)
+
+plt.figure()
+sns.heatmap(cm, annot=True, fmt='d')
+plt.title("Confusion Matrix")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.show()
+
 
 ```
-
 
 
 ## Dataset Information
@@ -113,32 +127,35 @@ Include screenshot of the dataset
 ## OUTPUT
 <img width="1033" height="490" alt="image" src="https://github.com/user-attachments/assets/c8bfd1ca-150f-4cf7-861d-2b18d896356d" />
 
-<img width="1509" height="712" alt="image" src="https://github.com/user-attachments/assets/b9d7264a-b53f-499f-9948-515b8d649cd8" />
 
 ### Confusion Matrix
 
 Include confusion matrix here
 
-<img width="761" height="301" alt="image" src="https://github.com/user-attachments/assets/8d539848-4683-456a-ba00-fd8224b94107" />
+<img width="994" height="723" alt="image" src="https://github.com/user-attachments/assets/f97f7901-131a-4496-bc35-2a88038cede4" />
+
 
 
 ### Classification Report
 
 Include Classification Report here
-<img width="746" height="295" alt="image" src="https://github.com/user-attachments/assets/d15b41f4-3dae-43b3-aa91-0d77c29f534c" />
 
+
+<img width="685" height="323" alt="image" src="https://github.com/user-attachments/assets/6a9fe531-bd7a-4d4b-b557-7c30283fb0a2" />
 
 
 ### New Sample Data Prediction
 
-<img width="1097" height="409" alt="image" src="https://github.com/user-attachments/assets/0060cda1-016c-4346-92e3-4e9b4d7d9923" />
+
+<img width="819" height="235" alt="image" src="https://github.com/user-attachments/assets/391b0962-e5f1-42f0-92e4-5212d66fda2c" />
+
 
 ### Result:
 
 The Neural Network model was successfully developed to classify customers into four segments (A, B, C, D) based on Age, Annual Income, and Spending Score.
 
 
-Include your sample input and output here
+
 
 ## RESULT
-Include your result here
+The Neural Network Classification Model was successfully developed and trained using PyTorch.
