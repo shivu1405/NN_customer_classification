@@ -16,7 +16,11 @@ You are required to help the manager to predict the right group of the new custo
 
 Include the neural network model diagram.
 
-<img width="1880" height="983" alt="image" src="https://github.com/user-attachments/assets/b766cdba-8dfc-4a15-9111-a907f6726696" />
+
+
+<img width="1893" height="994" alt="image" src="https://github.com/user-attachments/assets/84632660-22d4-40ed-a7f1-597891b815c1" />
+
+
 
 
 ## DESIGN STEPS
@@ -46,73 +50,86 @@ Evaluate the trained model using Confusion Matrix and Classification Report, and
 
 ### Name: Shivasri S
 ### Register Number: 212224220098
-
-```python
+```
 class PeopleClassifier(nn.Module):
     def __init__(self, input_size):
-        super(PeopleClassifier, self).__init__()
-        self.fc1 = nn.Linear(input_size, 64)
-        self.fc2 = nn.Linear(64, 32)
-        self.fc3 = nn.Linear(32, 4)
-        self.relu = nn.ReLU()
-        
-    def forward(self, x):
-        x = self.relu(self.fc1(x))
-        x = self.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
+        super().__init__()
+        self.model = nn.Sequential(
+            nn.Linear(input_size, 32),
+            nn.ReLU(),
+            nn.Linear(32, 16),
+            nn.ReLU(),
+            nn.Linear(16, 4)
+        )
 
-input_size = X_train.shape[1]
-model = PeopleClassifier(input_size)
+    def forward(self, x):
+        return self.model(x)
+
+model = PeopleClassifier(X_train.shape[1])
 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
+# -----------------------------
+# Training
+# -----------------------------
+print("Name: Shivasri")
+print("Register Number: 212224220098")
+print("\nTraining Output\n")
 
+epochs = 10
+for epoch in range(epochs):
+    optimizer.zero_grad()
+    outputs = model(X_train)
+    loss = criterion(outputs, y_train)
+    loss.backward()
+    optimizer.step()
+    print(f"Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.4f}")
 
-```
-
-```python
-def train_model(model, train_loader, criterion, optimizer, epochs):
-    for epoch in range(epochs):
-        for inputs, labels in train_loader:
-            optimizer.zero_grad()
-            outputs = model(inputs)
-            loss = criterion(outputs, labels)
-            loss.backward()
-            optimizer.step()
-        
-        if epoch % 10 == 0:
-            print(f"Epoch {epoch}, Loss: {loss.item()}")
-
-train_model(model, train_loader, criterion, optimizer, epochs=100)
-
+# -----------------------------
 # Evaluation
-model.eval()
+# -----------------------------
 with torch.no_grad():
     outputs = model(X_test)
     _, predicted = torch.max(outputs, 1)
 
-
-```
-```python
-# Confusion Matrix
 cm = confusion_matrix(y_test, predicted)
 
-print("\nName: Shivasri")
-print("Register Number: 212224220098")
-
-print("\nConfusion Matrix:")
+print("\n\nConfusion Matrix")
+print("Name: Shivasri")
+print("Register Number: 212224220098\n")
 print(cm)
 
-plt.figure()
-sns.heatmap(cm, annot=True, fmt='d')
-plt.title("Confusion Matrix")
+# Plot confusion matrix
+plt.figure(figsize=(5,4))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
+plt.title("Confusion Matrix")
 plt.show()
 
+print("\nClassification Report")
+print("Name: Shivasri")
+print("Register Number: 212224220098\n")
+print(classification_report(y_test, predicted))
 
+# -----------------------------
+# New Sample Prediction
+# -----------------------------
+print("\nNew Sample Data Prediction")
+print("Name:Shivasri S")
+print("Register Number: 212224220098\n")
+
+# Example sample (change values if needed)
+sample = X_test[0].unsqueeze(0)
+
+prediction = model(sample)
+_, predicted_class = torch.max(prediction, 1)
+
+segments = ["A", "B", "C", "D"]
+
+print("Input Sample:", sample.numpy())
+print("Predicted Segment:", segments[predicted_class.item()])
 ```
 
 
@@ -120,19 +137,20 @@ plt.show()
 
 Include screenshot of the dataset
 
-<img width="1919" height="1022" alt="image" src="https://github.com/user-attachments/assets/b79115d2-948f-4368-ad15-40fa9711183c" />
+<img width="1919" height="928" alt="image" src="https://github.com/user-attachments/assets/30ba02d4-8af5-4369-9af0-ff6ec5c98cee" />
+
 
 
 
 ## OUTPUT
-<img width="1033" height="490" alt="image" src="https://github.com/user-attachments/assets/c8bfd1ca-150f-4cf7-861d-2b18d896356d" />
-
+<img width="928" height="358" alt="image" src="https://github.com/user-attachments/assets/e09130ce-13f3-40b3-910a-2700a7147471" />
 
 ### Confusion Matrix
 
 Include confusion matrix here
 
-<img width="994" height="723" alt="image" src="https://github.com/user-attachments/assets/f97f7901-131a-4496-bc35-2a88038cede4" />
+<img width="835" height="694" alt="image" src="https://github.com/user-attachments/assets/2e67e979-1e9d-4471-ba97-d073d61dda3a" />
+
 
 
 
@@ -141,13 +159,15 @@ Include confusion matrix here
 Include Classification Report here
 
 
-<img width="685" height="323" alt="image" src="https://github.com/user-attachments/assets/6a9fe531-bd7a-4d4b-b557-7c30283fb0a2" />
+<img width="720" height="346" alt="image" src="https://github.com/user-attachments/assets/5fcc399c-af1e-4019-ae09-e25cf1de2888" />
+
 
 
 ### New Sample Data Prediction
 
 
-<img width="819" height="235" alt="image" src="https://github.com/user-attachments/assets/391b0962-e5f1-42f0-92e4-5212d66fda2c" />
+
+<img width="1615" height="169" alt="image" src="https://github.com/user-attachments/assets/0efcda86-c048-4739-b7bb-459d79092190" />
 
 
 ### Result:
