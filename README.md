@@ -143,13 +143,13 @@ Include screenshot of the dataset
 
 
 ## OUTPUT
-<img width="928" height="358" alt="image" src="https://github.com/user-attachments/assets/e09130ce-13f3-40b3-910a-2700a7147471" />
 
 ### Confusion Matrix
 
 Include confusion matrix here
 
-<img width="835" height="694" alt="image" src="https://github.com/user-attachments/assets/2e67e979-1e9d-4471-ba97-d073d61dda3a" />
+<img width="1182" height="678" alt="image" src="https://github.com/user-attachments/assets/7e8873f9-8560-45eb-b99c-edf45fae74b9" />
+
 
 
 
@@ -158,8 +158,7 @@ Include confusion matrix here
 
 Include Classification Report here
 
-
-<img width="720" height="346" alt="image" src="https://github.com/user-attachments/assets/5fcc399c-af1e-4019-ae09-e25cf1de2888" />
+<img width="819" height="302" alt="image" src="https://github.com/user-attachments/assets/97637723-f6da-4fed-99b1-e751bede3017" />
 
 
 
@@ -167,7 +166,7 @@ Include Classification Report here
 
 
 
-<img width="1615" height="169" alt="image" src="https://github.com/user-attachments/assets/0efcda86-c048-4739-b7bb-459d79092190" />
+<img width="1719" height="124" alt="image" src="https://github.com/user-attachments/assets/d46bf934-3dd7-4e22-abd5-9047477e922a" />
 
 
 ### Result:
